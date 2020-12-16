@@ -7,10 +7,14 @@ class BasePairAgent:
     hosts = ['nome', 'me1', 'me2', 'me3', 'me12', 'me23', 'me123']
     abbr_hosts = {'nome': 'no-methyl', 'me1': 'methyl-5th', 'me2': 'methyl-7th', 'me3': 'methyl-9th',
                   'me12': 'methyl-5+7th', 'me23': 'methyl-7+9th', 'me123': 'methyl-5+7+9th'}
-    d_colors = {'nome': 'black', 'me1': 'gray', 'me2': 'steelblue', 'me3': 'forestgreen', 'me12': 'coral', 'me23': 'brown', 'me123': 'gold'}
-    hosts_group = [['nome', 'me2'],
+    d_colors = {'nome': 'black', 'me1': 'slateblue', 'me2': 'steelblue', 'me3': 'forestgreen', 'me12': 'darkred', 'me23': 'orange', 'me123': 'gold'}
+    hosts_group = [['nome', 'me1'],
+                   ['nome', 'me12'],
+                   ['nome', 'me123'],
                    ['me1', 'me2', 'me3'],
-                   ['nome', 'me23', 'me2', 'me12', 'me123']]
+                   ['me12', 'me23'],
+                   ['me1', 'me123'],
+                   ['me12', 'me123']]    ## , 'me2', 'me3', 'me123'
 
     def __init__(self, rootfolder, time_interval):
         self.rootfolder = rootfolder
@@ -27,9 +31,9 @@ class BasePairAgent:
 
         self.parameters = ['shear', 'buckle', 'stretch', 'propeller', 'stagger', 'opening']
 
-    def histogram_three_groups(self, figsize, parameter, bins, xlines, xlim, ylim):
+    def histogram_groups(self, figsize, parameter, bins, xlines, xlim, ylim):
         nrows = 1
-        ncols = 3
+        ncols = 7
         fig, axes = plt.subplots(nrows=nrows, ncols=ncols, figsize=figsize, sharey=True, sharex=True)
         col_id = 0
         xlabel = self.get_xlabel(parameter)
@@ -37,11 +41,11 @@ class BasePairAgent:
             ax = axes[col_id]
             for host in hosts:
                 data = self.get_data(host, parameter)
-                ax.hist(data, bins=bins, density=True, color=self.d_colors[host], alpha=0.4, label=self.abbr_hosts[host])
+                ax.hist(data, bins=bins, density=True, color=self.d_colors[host], alpha=0.5, label=self.abbr_hosts[host])
             for xvalue in xlines:
                 ax.axvline(xvalue, color='black', alpha=0.2)
             ax.set_xlabel(xlabel,fontsize=self.lbfz)
-            ax.set_ylabel('P', fontsize=self.lbfz)
+            ax.set_ylabel('Probabiity Density', fontsize=self.lbfz)
             ax.legend(frameon=False, fontsize=self.lgfz)
             ax.tick_params(axis='both', labelsize=self.ticksize)
             if xlim is not None:
@@ -62,7 +66,8 @@ class BasePairAgent:
             ax.hist(data, bins=bins, density=True, color=self.d_colors[host], alpha=0.4)
             ax.set_title(self.abbr_hosts[host])
             ax.set_xlabel(parameter)
-            ax.set_ylabel('P')
+            ax.set_ylabel('Probabiity Density')
+            ax.legend(loc = 'upper left')
         return fig, axes
 
     def get_xlabel(self, parameter):
