@@ -8,9 +8,9 @@ class BasePairAgent:
     abbr_hosts = {'nome': 'no-methyl', 'me1': 'methyl-5th', 'me2': 'methyl-7th', 'me3': 'methyl-9th',
                   'me12': 'methyl-5+7th', 'me23': 'methyl-7+9th', 'me123': 'methyl-5+7+9th'}
     d_colors = {'nome': 'black', 'me1': 'gray', 'me2': 'steelblue', 'me3': 'forestgreen', 'me12': 'coral', 'me23': 'brown', 'me123': 'gold'}
-    hosts_group = [['nome', 'me2'],
-                   ['me1', 'me2', 'me3'],
-                   ['nome', 'me23', 'me2', 'me12', 'me123']]
+    hosts_group = [['nome', 'me1', 'me2', 'me3', 'me12', 'me23', 'me123'],
+                   ['nome', 'me2'],
+                   ['nome', 'me2', 'me12', 'me123']]
 
     def __init__(self, rootfolder, time_interval):
         self.rootfolder = rootfolder

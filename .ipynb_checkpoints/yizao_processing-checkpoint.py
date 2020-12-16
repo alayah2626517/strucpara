@@ -1,4 +1,5 @@
 from os import path, system
+from shutil import copyfile
 from io import StringIO
 import pandas as pd
 from strucpara.miscell import check_dir_exist_and_make
@@ -10,7 +11,7 @@ class BasePairAgent:
     def __init__(self, rootfolder, host, time_interval):
         self.rootfolder = rootfolder
         self.type_na = 'bdna+bdna'
-        self.n_bp = 13
+        self.n_bp = 21
         self.host = host
         self.time_interval = time_interval
         self.host_folder = path.join(rootfolder, host)
@@ -22,6 +23,8 @@ class BasePairAgent:
 
         self.server_root = '/home/yizaochen/x3dna/paper_2021'
         self.host_time_server = path.join(self.server_root, host, time_interval)
+
+        #Wait to modify to x3dna file
         self.ensemble_out_server = path.join(self.host_time_server, f'{self.type_na}.ensemble.out')
         
         self.parameters = ['shear', 'buckle', 'stretch', 'propeller', 'stagger', 'opening']
@@ -31,9 +34,9 @@ class BasePairAgent:
         for folder in [self.host_folder, self.host_time_folder]:
             check_dir_exist_and_make(folder)
 
-    def download_ensesmble_out(self, serverip):
-        print('Please excute the following in the terminal:')
-        cmd = f'scp yizaochen@{serverip}:{self.ensemble_out_server} {self.ensemble_out}'
+    def cp_x3dna_to_out(self, serverip):
+        copyfile(self.ensemble_out_server, self.ensemble_out)
+        cmd = f'{self.ensemble_out_server} {self.ensemble_out}'
         print(cmd)
         
     def extract_parameters(self):
@@ -45,7 +48,7 @@ class BasePairAgent:
 
     def convert_dat_to_csv(self):
         for parameter in self.parameters:
-            dat_in = path.join(self.host_time_folder, f'{parameter}.out')
+            dat_in = path.join(self.host_time_folder, f'{parameter}.dat')
             f = open(dat_in, 'r')
             lines = f.readlines()
             f.close()
